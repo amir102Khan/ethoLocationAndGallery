@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">EthoImage</string>
+
+    <string name="camera">For using camera, you need to enable camera and storage permission.</string>
+    <string name="location">For using application, you need to enable location permission.</string>
+    <string name="okay">Okay</string>
+    <string name="ok">OK</string>
+    <string name="location_permission_error">Location permission not granted</string>
+    <string name="enable_gps">Please enable GPS to continue.</string>
+    <string name="bo_location_available">No location available</string>
+    <string name="proceed">Proceed</string>
+    <string name="exit">Exit</string>
+
 </resources>

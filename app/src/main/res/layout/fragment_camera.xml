@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="cameraViewModel"
+            type="com.amir.ethoimage.viewModel.CameraViewModel" />
+    </data>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.Camera">
+
+    <ImageView
+        android:onClick="@{()-> cameraViewModel.onCameraClick()}"
+        android:layout_margin="@dimen/_15sdp"
+        android:id="@+id/imgCamera"
+        android:src="@drawable/ic_camera"
+        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"/>
+
+    <TextView
+        android:text="@={cameraViewModel.location}"
+        android:id="@+id/location"
+        android:hint="Location"
+        android:textSize="@dimen/_13sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_below="@id/imgCamera"
+        android:padding="@dimen/_5sdp"
+        android:drawablePadding="@dimen/_5sdp"
+        android:drawableStart="@drawable/ic_location_on_black_24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:onClick="@{()-> cameraViewModel.onClick()}"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:text="Share"
+        android:background="@color/black"
+        android:id="@+id/btnShare"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_below="@id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
+</layout>
