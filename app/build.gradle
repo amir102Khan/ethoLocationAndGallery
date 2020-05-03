@@ -14,16 +14,19 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 
     dataBinding {
         enabled = true
@@ -33,41 +36,29 @@ android {
         targetCompatibility = 1.8
     }
 
-    sourceSets {
-        main {
-            proto {
-                srcDir 'src/main/protobuf'
-                srcDir 'src/main/protocolbuffers'
-                include '**/*.protodevel'
-
-            }
-
-        }
-    }
 }
 
 protobuf {
     protoc {
         artifact = 'com.google.protobuf:protoc:3.0.0'
-        path = '/usr/local/bin/protoc'
     }
-    /*plugins {
+    plugins {
         javalite {
             artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
         }
-    }*/
+    }
     generateProtoTasks {
         all().each { task ->
             task.builtins {
-               // remove java
-                java { }
+                remove java
             }
-            /*task.plugins {
-                javalite { }
-            }*/
+            task.plugins {
+                javalite {}
+            }
         }
     }
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -93,8 +84,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
-
     implementation 'com.google.protobuf:protobuf-lite:3.0.0'
 
+    // Protobuf
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
 }
 

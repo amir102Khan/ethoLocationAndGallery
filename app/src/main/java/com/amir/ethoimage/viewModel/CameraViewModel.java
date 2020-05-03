@@ -1,6 +1,7 @@
 package com.amir.ethoimage.viewModel;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -9,6 +10,7 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.amir.ethoimage.activities.SearchDevice;
 import com.amir.ethoimage.interfaces.DatabaseListener;
 import com.amir.ethoimage.interfaces.GetLocationListener;
 import com.amir.ethoimage.model.BluetoothObject;
@@ -84,6 +86,7 @@ public class CameraViewModel extends ViewModel {
                 super.onPostExecute(aVoid);
                 //  hideLoader();
                 databaseListener.onSuccess("Image saved");
+                context.startActivity(new Intent(context, SearchDevice.class));
                 imageFile = null;
 
             }

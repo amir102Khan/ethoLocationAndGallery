@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.amir.ethoimage.interfaces.Constants;
+import com.google.protobuf.ByteString;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,16 +18,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
+import proto.BtMessageProtos;
+
 public class BluetoothService implements Constants {
 
     private Handler handler;
     private SendRecieve sendRecieve;
     private BluetoothAdapter bluetoothAdapter;
     private String imagePath;
+    private BtMessageProtos.BtMessage.Builder btMessage;
 
     public BluetoothService(Handler handler) {
         this.handler = handler;
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        this.btMessage = BtMessageProtos.BtMessage.newBuilder();
     }
 
     public void getImagePath(String path) {
@@ -182,6 +187,7 @@ public class BluetoothService implements Constants {
         public void write(byte[] bytes) {
             try {
                 outputStream.write(bytes);
+                 btMessage.build().writeTo(outputStream);
                 outputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -195,6 +201,9 @@ public class BluetoothService implements Constants {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] imageBytes = stream.toByteArray();
         int subArray = 400;
+
+        btMessage.setName(imagePath)
+                .setImageData(  ByteString.copyFrom(imageBytes));
         sendRecieve.write(String.valueOf(imageBytes.length).getBytes());
 
         for (int i = 0; i < imageBytes.length; i += subArray) {
@@ -203,5 +212,6 @@ public class BluetoothService implements Constants {
             sendRecieve.write(tempArray);
         }
     }
+
 
 }

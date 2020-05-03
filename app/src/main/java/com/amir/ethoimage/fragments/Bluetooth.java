@@ -1,8 +1,6 @@
 package com.amir.ethoimage.fragments;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,8 +21,9 @@ import com.amir.ethoimage.R;
 import com.amir.ethoimage.core.BaseFragment;
 import com.amir.ethoimage.databinding.FragmentBluetoothBinding;
 import com.amir.ethoimage.model.BluetoothService;
+import com.google.protobuf.InvalidProtocolBufferException;
 
-import java.io.IOException;
+import proto.BtMessageProtos;
 
 
 public class Bluetooth extends BaseFragment implements View.OnClickListener {
@@ -71,17 +70,17 @@ public class Bluetooth extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    private void checkBluetooth(){
-        if (!bluetoothAdapter.isEnabled()){
+    private void checkBluetooth() {
+        if (!bluetoothAdapter.isEnabled()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent,REQUEST_ENABLE_BLUETOOTH);
+            startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ENABLE_BLUETOOTH){
+        if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
             checkBluetooth();
         }
     }
@@ -117,8 +116,16 @@ public class Bluetooth extends BaseFragment implements View.OnClickListener {
                 case MESSAGE_RECIEVED:
                     showToast("message recieved");
                     byte[] readBuff = (byte[]) msg.obj;
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(readBuff, 0, msg.arg1);
-                    binding.imgBluetooth.setImageBitmap(bitmap);
+
+                    try {
+                        BtMessageProtos.BtMessage btMessage = BtMessageProtos.BtMessage.parseFrom(readBuff);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(btMessage.getImageData().toByteArray(), 0, msg.arg1);
+                        binding.imgBluetooth.setImageBitmap(bitmap);
+                        binding.imagName.setText("Image File : " + btMessage.getName());
+                    } catch (InvalidProtocolBufferException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
             }
             return false;

@@ -27,5 +27,15 @@
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp"/>
+
+    <TextView
+        android:id="@+id/imagName"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_below="@id/imgBluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>
 </layout>

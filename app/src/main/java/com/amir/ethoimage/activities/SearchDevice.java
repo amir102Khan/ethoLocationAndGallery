@@ -25,6 +25,8 @@ import com.amir.ethoimage.util.Common;
 
 import java.util.ArrayList;
 
+import proto.BtMessageProtos;
+
 
 public class SearchDevice extends BaseActivity implements OnItemClick, Constants {
 
@@ -44,6 +46,7 @@ public class SearchDevice extends BaseActivity implements OnItemClick, Constants
         getData();
         setEMptyAdapter();
         checkBluetooth();
+
     }
 
     private void init() {
@@ -110,9 +113,6 @@ public class SearchDevice extends BaseActivity implements OnItemClick, Constants
                     break;
                 case MESSAGE_RECIEVED:
                     showToast("message recieved");
-                    byte[] readBuff = (byte[]) msg.obj;
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(readBuff, 0, msg.arg1);
-                    // set image.setImageBitmap(bitmap);
                     break;
             }
             return false;

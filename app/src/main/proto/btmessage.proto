@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package com.amir.ethoimage;
+
+option java_package = "proto";
+option java_outer_classname = "BtMessageProtos";
+
+message BtMessage {
+  required string name = 1;
+  required bytes image_data = 2;
+}
