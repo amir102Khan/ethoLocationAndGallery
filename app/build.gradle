@@ -1,4 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.protobuf'
+
+/*sourceSets {
+    main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/javalite"
+}*/
 
 android {
     compileSdkVersion 29
@@ -23,6 +28,45 @@ android {
     dataBinding {
         enabled = true
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    sourceSets {
+        main {
+            proto {
+                srcDir 'src/main/protobuf'
+                srcDir 'src/main/protocolbuffers'
+                include '**/*.protodevel'
+
+            }
+
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+        path = '/usr/local/bin/protoc'
+    }
+    /*plugins {
+        javalite {
+            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
+        }
+    }*/
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+               // remove java
+                java { }
+            }
+            /*task.plugins {
+                javalite { }
+            }*/
+        }
+    }
 }
 
 dependencies {
@@ -44,11 +88,13 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
 
-
     // room database
     def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
 
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
+
 }
+

@@ -2,19 +2,29 @@ package com.amir.ethoimage.viewModel;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.amir.ethoimage.interfaces.DatabaseListener;
 import com.amir.ethoimage.interfaces.GetLocationListener;
+import com.amir.ethoimage.model.BluetoothObject;
 import com.amir.ethoimage.roomDatabase.CameraDatabase;
 import com.amir.ethoimage.roomDatabase.DatabaseClient;
 import com.amir.ethoimage.util.LocationHelper;
 import com.amir.ethoimage.util.PermissionHelper;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -32,26 +42,26 @@ public class CameraViewModel extends ViewModel {
         this.context = context;
     }
 
-    public void getListener(DatabaseListener databaseListener){
+    public void getListener(DatabaseListener databaseListener) {
         this.databaseListener = databaseListener;
     }
-    public void setImageFile(File file){
+
+    public void setImageFile(File file) {
         this.imageFile = file;
     }
 
 
     public void onClick() {
-        if (imageFile != null){
+        if (imageFile != null) {
             addCameraData();
-        }
-        else {
+        } else {
             databaseListener.onError("Please click image");
         }
     }
 
-    private void addCameraData(){
+    private void addCameraData() {
         //  showLoader();
-        class SaveData extends AsyncTask<Void,Void,Void> {
+        class SaveData extends AsyncTask<Void, Void, Void> {
             @Override
             protected Void doInBackground(Void... voids) {
                 // creating database
@@ -83,7 +93,6 @@ public class CameraViewModel extends ViewModel {
                 super.onProgressUpdate(values);
 
 
-
             }
         }
 
@@ -92,23 +101,21 @@ public class CameraViewModel extends ViewModel {
         saveData.execute();
     }
 
-    public void onCameraClick(){
-        if (PermissionHelper.checkPermissionCG(context)){
-            if (PermissionHelper.checkLocationPermission(context)){
+
+
+
+    public void onCameraClick() {
+        if (PermissionHelper.checkPermissionCG(context)) {
+            if (PermissionHelper.checkLocationPermission(context)) {
                 getCurrentLocation();
                 openCamera();
+            } else {
+                PermissionHelper.requestLocationPermission(context);
             }
-            else {
-             PermissionHelper.requestLocationPermission(context);
-            }
-        }
-        else {
+        } else {
             PermissionHelper.requestPermissionCG(context);
         }
     }
-
-
-
 
     public void openCamera() {
         EasyImage.openCamera(context, 1);

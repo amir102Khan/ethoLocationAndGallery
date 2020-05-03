@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.amir.ethoimage.R;
 import com.amir.ethoimage.core.BaseActivity;
 import com.amir.ethoimage.databinding.ActivityDashboardBinding;
+import com.amir.ethoimage.fragments.Bluetooth;
 import com.amir.ethoimage.fragments.Camera;
 import com.amir.ethoimage.fragments.Gallery;
 import com.amir.ethoimage.util.Common;
@@ -31,7 +32,7 @@ public class Dashboard extends BaseActivity {
 
         setUpTab();
         setTabSelectedListner();
-        switchFragment( Camera.getInstance());
+        switchFragment( new Camera());
         setToolbar("Camera");
     }
 
@@ -47,6 +48,7 @@ public class Dashboard extends BaseActivity {
     private void setUpTab() {
         setCustomTabView( R.drawable.camera_selector);
         setCustomTabView( R.drawable.gallery_selector);
+        setCustomTabView(R.drawable.bluetooth_selector);
     }
 
     private void setCustomTabView( int icon) {
@@ -71,12 +73,16 @@ public class Dashboard extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        switchFragment(Camera.getInstance());
+                        switchFragment(new Camera());
                         setToolbar("Camera");
                         break;
                     case 1:
-                        switchFragment(Gallery.getInstance());
+                        switchFragment(new Gallery());
                         setToolbar("Gallery");
+                        break;
+                    case 2:
+                        switchFragment(new Bluetooth());
+                        setToolbar("Bluetooth");
                         break;
                 }
             }

@@ -1,5 +1,7 @@
 package com.amir.ethoimage.util;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.text.TextUtils;
@@ -11,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.amir.ethoimage.R;
+import com.amir.ethoimage.model.BluetoothObject;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 
 public class Common {
@@ -70,5 +76,34 @@ public class Common {
             actionBar.setDisplayShowTitleEnabled(false);
             title_tv.setText(title);
         }
+    }
+
+    public static ArrayList getArrayOfAlreadyPairedBluetoothDevices(BluetoothAdapter bluetoothAdapter) {
+        ArrayList <BluetoothObject> arrayOfAlreadyPairedBTDevices = null;
+
+        // Query paired devices
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        // If there are any paired devices
+        if (pairedDevices.size() > 0)
+        {
+            arrayOfAlreadyPairedBTDevices = new ArrayList<BluetoothObject>();
+
+            // Loop through paired devices
+            for (BluetoothDevice device : pairedDevices)
+            {
+                // Create the device object and add it to the arrayList of devices
+                BluetoothObject bluetoothObject = new BluetoothObject();
+
+                bluetoothObject.setBluetoothName(device.getName());
+                bluetoothObject.setBluetoothAddress(device.getAddress());
+                bluetoothObject.setBluetoothState(device.getBondState());
+                bluetoothObject.setBluetoothType(device.getType());
+                bluetoothObject.setBluetoothUUID(device.getUuids());
+
+                arrayOfAlreadyPairedBTDevices.add(bluetoothObject);
+            }
+        }
+
+        return arrayOfAlreadyPairedBTDevices;
     }
 }
